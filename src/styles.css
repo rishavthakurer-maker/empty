@@ -1,0 +1,43 @@
+:root{
+  --bg:#0f0f10;
+  --card:#1b1b1d;
+  --accent:#8b0000;
+  --muted:#cfcfd1;
+  --white:#ffffff;
+}
+
+[data-theme="light"]{
+  --bg: #f6f6f7;
+  --card: #ffffff;
+  --accent: #8b0000;
+  --muted: #333333;
+  --white: #0b0b0b;
+}
+
+*{box-sizing:border-box;font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+body,html,#root{height:100%;margin:0;background:linear-gradient(135deg,#0a0a0b 0%, #1a0a0c 100%);color:var(--muted)}
+[data-theme="light"] body, [data-theme="light"] html{background:linear-gradient(135deg,#f6f6f7 0%, #e8e8eb 100%)}
+
+.app-root{display:flex;align-items:center;justify-content:center;height:100%;padding:20px;animation:fadeIn 0.3s ease-in}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+.card{background:var(--card);border-radius:16px;padding:28px;min-width:320px;box-shadow:0 12px 30px rgba(0,0,0,0.7);border:1px solid rgba(139,0,0,0.2);animation:slideIn 0.4s ease-out;backdrop-filter:blur(10px)}
+
+.header{display:flex;align-items:center;gap:12px}
+.title{font-size:24px;color:var(--white);font-weight:700;background:linear-gradient(135deg,var(--accent),#ff6b6b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+.buttons{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.btn{background:linear-gradient(135deg,var(--accent),#6b0000);border:none;color:white;padding:14px 18px;border-radius:12px;cursor:pointer;font-weight:600;box-shadow:0 4px 12px rgba(139,0,0,0.4);transition:all 0.2s ease;position:relative;overflow:hidden}
+.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 16px rgba(139,0,0,0.5)}
+.btn:active:not(:disabled){transform:translateY(0)}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+.btn.secondary{background:transparent;border:2px solid rgba(139,0,0,0.4);color:var(--muted);transition:all 0.2s ease}
+.btn.secondary:hover:not(:disabled){background:rgba(139,0,0,0.1);border-color:var(--accent)}
+
+.row{display:flex;gap:8px;align-items:center}
+.flag{width:28px;height:18px;border-radius:4px;background:#fff;display:inline-block}
+.small{font-size:13px;color:var(--muted)}
+
+input[type="range"]{width:100%;accent-color:var(--accent)}
+select{background:var(--bg);color:var(--white);border:1px solid rgba(139,0,0,0.3);padding:8px;border-radius:8px}
