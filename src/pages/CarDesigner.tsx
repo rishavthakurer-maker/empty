@@ -245,7 +245,7 @@ export default function CarDesigner({
         />
       </div>
 
-      <div style={styles.tabBar}>
+      <div style={{...styles.tabBar, overflowX: 'auto' as const}}>
         {tabs.map(tab => (
           <button 
             key={tab.id}

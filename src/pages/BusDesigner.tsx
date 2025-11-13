@@ -131,8 +131,8 @@ export default function BusDesigner({
         material: 'steel' as const,
         roofType: 'fixed' as const,
         bodyStyle: 'bus' as any,
-        frontBumper: 'standard' as const,
-        rearBumper: 'standard' as const,
+        frontBumper: 'basic' as const,
+        rearBumper: 'basic' as const,
         sideSkirts: 'standard' as const,
         wheels: { size: 22, type: 'steel' as const, design: 'standard' as const, offset: 0 },
         tires: { brand: 'economy' as const, season: 'all-season' as const, width: 315, aspectRatio: 70, loadRating: 'reinforced' as const },
@@ -252,7 +252,7 @@ export default function BusDesigner({
         />
       </div>
 
-      <div style={styles.tabBar}>
+      <div style={{...styles.tabBar, overflowX: 'auto' as const}}>
         {tabs.map(tab => (
           <button 
             key={tab.id}
