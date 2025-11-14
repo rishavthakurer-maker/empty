@@ -11,9 +11,13 @@ import GlobalMarket from './pages/GlobalMarket'
 import Research from './pages/Research'
 import Competition from './pages/Competition'
 import Dashboard from './pages/Dashboard'
+import Marketing from './pages/Marketing'
+import Racing from './pages/Racing'
+import Shop from './pages/Shop'
+import PrivacyPolicy from './pages/PrivacyPolicy'
 import translations from './i18n/translations'
 
-export type Page = 'start' | 'setup' | 'menu' | 'settings' | 'selection' | 'designer' | 'manufacturing' | 'market' | 'research' | 'competition' | 'dashboard'
+export type Page = 'start' | 'setup' | 'menu' | 'settings' | 'selection' | 'designer' | 'manufacturing' | 'market' | 'research' | 'competition' | 'dashboard' | 'marketing' | 'racing' | 'shop' | 'privacy'
 
 // Engine Components
 export interface EngineComponent {
@@ -121,6 +125,80 @@ export interface VisibilitySpec {
   wipers: 'manual' | 'intermittent' | 'auto-sense'
 }
 
+export interface MarketDemand {
+  country: string
+  demand: number // 0-100
+  trending: 'up' | 'down' | 'stable'
+  lastUpdate: number
+}
+
+export interface MarketingCampaign {
+  id: string
+  type: 'social' | 'tv' | 'billboard' | 'sponsorship' | 'influencer'
+  country: string
+  cost: number
+  duration: number // days
+  demandBoost: number
+  fansGained: number
+  startTime: number
+  active: boolean
+}
+
+export interface ProductionJob {
+  id: string
+  vehicleId: string
+  designId: string
+  quantity: number
+  progress: number // 0-100
+  timePerUnit: number // seconds
+  startTime: number
+  completed: boolean
+}
+
+export interface SalesJob {
+  id: string
+  vehicleId: string
+  country: string
+  quantity: number
+  progress: number // 0-100
+  timePerUnit: number // seconds based on demand
+  startTime: number
+  completed: boolean
+  revenue: number
+}
+
+export interface RaceResult {
+  id: string
+  playerVehicle: string
+  opponentCompany: string
+  opponentVehicle: string
+  playerScore: number
+  opponentScore: number
+  winner: 'player' | 'opponent'
+  reputationGained: number
+  timestamp: number
+}
+
+export interface MarketEvent {
+  id: string
+  type: 'boom' | 'crash' | 'shortage' | 'innovation' | 'scandal' | 'regulation'
+  description: string
+  effect: string
+  duration: number // days
+  multiplier: number // affects market prices/demand
+  startTime: number
+  active: boolean
+}
+
+export interface Competitor {
+  name: string
+  reputation: number
+  vehicleCount: number
+  marketShare: number
+  growthRate: number // % per day
+  lastUpdate: number
+}
+
 export interface GameState {
   money: number
   companyName: string
@@ -130,6 +208,19 @@ export interface GameState {
   sales: { [country: string]: number }
   reputation: number
   employees: number
+  fans: number
+  rating: number // 0-5 stars
+  marketDemands: MarketDemand[]
+  marketingCampaigns: MarketingCampaign[]
+  productionJobs: ProductionJob[]
+  salesJobs: SalesJob[]
+  raceHistory: RaceResult[]
+  marketEvents: MarketEvent[]
+  competitors: Competitor[]
+  lastEventCheck: number
+  researchPoints: number // earned from manufacturing
+  premiumCurrency: number // purchased with real money
+  adFree: boolean // ad-free purchase status
 }
 
 export interface Vehicle {
@@ -201,7 +292,7 @@ export default function App() {
   const [theme, setTheme] = useState<string>(() => localStorage.getItem('vt_theme') || 'dark')
   const [gameState, setGameState] = useState<GameState>(() => {
     const saved = localStorage.getItem('vt_game')
-    return saved ? JSON.parse(saved) : {
+    const defaultState: GameState = {
       money: 100000,
       companyName: 'My Auto Corp',
       vehicles: [],
@@ -209,7 +300,63 @@ export default function App() {
       research: [],
       sales: {},
       reputation: 0,
-      employees: 5
+      employees: 5,
+      fans: 0,
+      rating: 0,
+      marketDemands: [
+        { country: 'United States', demand: 75, trending: 'stable', lastUpdate: Date.now() },
+        { country: 'Europe', demand: 70, trending: 'up', lastUpdate: Date.now() },
+        { country: 'Asia', demand: 85, trending: 'up', lastUpdate: Date.now() },
+        { country: 'India', demand: 90, trending: 'stable', lastUpdate: Date.now() },
+        { country: 'Brazil', demand: 65, trending: 'down', lastUpdate: Date.now() },
+      ],
+      marketingCampaigns: [],
+      productionJobs: [],
+      salesJobs: [],
+      raceHistory: [],
+      marketEvents: [],
+      competitors: [
+        { name: 'Tesla', reputation: 85, vehicleCount: 150, marketShare: 0.15, growthRate: 0.05, lastUpdate: Date.now() },
+        { name: 'BMW', reputation: 90, vehicleCount: 200, marketShare: 0.20, growthRate: 0.03, lastUpdate: Date.now() },
+        { name: 'Toyota', reputation: 95, vehicleCount: 300, marketShare: 0.30, growthRate: 0.02, lastUpdate: Date.now() },
+        { name: 'Ford', reputation: 80, vehicleCount: 180, marketShare: 0.18, growthRate: 0.025, lastUpdate: Date.now() },
+        { name: 'Honda', reputation: 88, vehicleCount: 220, marketShare: 0.22, growthRate: 0.03, lastUpdate: Date.now() },
+        { name: 'Volkswagen', reputation: 85, vehicleCount: 190, marketShare: 0.19, growthRate: 0.028, lastUpdate: Date.now() },
+        { name: 'Hyundai', reputation: 78, vehicleCount: 160, marketShare: 0.16, growthRate: 0.04, lastUpdate: Date.now() },
+        { name: 'Mercedes', reputation: 92, vehicleCount: 170, marketShare: 0.17, growthRate: 0.025, lastUpdate: Date.now() },
+      ],
+      lastEventCheck: Date.now(),
+      researchPoints: 0,
+      premiumCurrency: 0,
+      adFree: false
+    }
+    
+    if (!saved) return defaultState
+    
+    try {
+      const parsed = JSON.parse(saved)
+      // Merge with default state to ensure all new properties exist
+      return {
+        ...defaultState,
+        ...parsed,
+        // Ensure arrays exist
+        marketDemands: parsed.marketDemands || defaultState.marketDemands,
+        marketingCampaigns: parsed.marketingCampaigns || [],
+        productionJobs: parsed.productionJobs || [],
+        salesJobs: parsed.salesJobs || [],
+        raceHistory: parsed.raceHistory || [],
+        marketEvents: parsed.marketEvents || [],
+        competitors: parsed.competitors || defaultState.competitors,
+        lastEventCheck: parsed.lastEventCheck || Date.now(),
+        fans: parsed.fans || 0,
+        rating: parsed.rating || 0,
+        researchPoints: parsed.researchPoints || 0,
+        premiumCurrency: parsed.premiumCurrency || 0,
+        adFree: parsed.adFree !== undefined ? parsed.adFree : defaultState.adFree,
+      }
+    } catch (e) {
+      console.error('Error loading save:', e)
+      return defaultState
     }
   })
 
@@ -242,11 +389,111 @@ export default function App() {
     localStorage.setItem('vt_timeSpeed', String(timeSpeed))
   }, [timeSpeed])
 
-  // simple game tick that accrues money based on timeSpeed
+  // Game tick system - handles production, sales, events, competitor growth
   useEffect(() => {
     if (!timeSpeed || timeSpeed <= 0) return
     const id = setInterval(() => {
-      setGameState(prev => ({ ...prev, money: prev.money + 10 * timeSpeed }))
+      setGameState(prev => {
+        const now = Date.now()
+        let newState = { ...prev }
+        
+        // Update production jobs (with safety check)
+        const updatedProductionJobs = (prev.productionJobs || []).map(job => {
+          if (job.completed) return job
+          const elapsed = (now - job.startTime) / 1000 * timeSpeed
+          const totalTime = job.quantity * job.timePerUnit
+          const progress = Math.min(100, (elapsed / totalTime) * 100)
+          return { ...job, progress, completed: progress >= 100 }
+        })
+        
+        // Update sales jobs (with safety check)
+        const updatedSalesJobs = (prev.salesJobs || []).map(job => {
+          if (job.completed) return job
+          const elapsed = (now - job.startTime) / 1000 * timeSpeed
+          const totalTime = job.quantity * job.timePerUnit
+          const progress = Math.min(100, (elapsed / totalTime) * 100)
+          return { ...job, progress, completed: progress >= 100 }
+        })
+        
+        // Update marketing campaigns (with safety check)
+        const updatedCampaigns = (prev.marketingCampaigns || []).map(campaign => {
+          if (!campaign.active) return campaign
+          const elapsed = (now - campaign.startTime) / (1000 * 60 * 60 * 24) * timeSpeed
+          if (elapsed >= campaign.duration) {
+            return { ...campaign, active: false }
+          }
+          return campaign
+        })
+        
+        // Update market events (with safety check)
+        const updatedEvents = (prev.marketEvents || []).map(event => {
+          if (!event.active) return event
+          const elapsed = (now - event.startTime) / (1000 * 60 * 60 * 24) * timeSpeed
+          if (elapsed >= event.duration) {
+            return { ...event, active: false }
+          }
+          return event
+        })
+        
+        // Random event check (every 5 minutes game time) - with safety check
+        const shouldCheckEvent = prev.lastEventCheck ? (now - prev.lastEventCheck) / 1000 * timeSpeed > 300 : false
+        if (shouldCheckEvent && Math.random() < 0.1) { // 10% chance
+          const eventTypes = ['boom', 'crash', 'shortage', 'innovation', 'scandal', 'regulation'] as const
+          const eventType = eventTypes[Math.floor(Math.random() * eventTypes.length)]
+          const eventDescriptions = {
+            boom: 'Economic boom increases market demand!',
+            crash: 'Market crash reduces consumer spending!',
+            shortage: 'Material shortage increases production costs!',
+            innovation: 'New technology breakthrough!',
+            scandal: 'Industry scandal affects reputation!',
+            regulation: 'New regulations impact sales!'
+          }
+          const eventMultipliers = {
+            boom: 1.5,
+            crash: 0.6,
+            shortage: 0.8,
+            innovation: 1.3,
+            scandal: 0.7,
+            regulation: 0.9
+          }
+          
+          const newEvent: MarketEvent = {
+            id: Date.now().toString(),
+            type: eventType,
+            description: eventDescriptions[eventType],
+            effect: eventType === 'boom' || eventType === 'innovation' ? 'positive' : 'negative',
+            duration: 3 + Math.floor(Math.random() * 7), // 3-10 days
+            multiplier: eventMultipliers[eventType],
+            startTime: now,
+            active: true
+          }
+          updatedEvents.push(newEvent)
+          newState.lastEventCheck = now
+        }
+        
+        // Update competitors (with safety check)
+        const updatedCompetitors = (prev.competitors || []).map(comp => {
+          const daysSinceUpdate = (now - comp.lastUpdate) / (1000 * 60 * 60 * 24) * timeSpeed
+          if (daysSinceUpdate >= 1) {
+            return {
+              ...comp,
+              reputation: Math.min(100, comp.reputation + Math.random() * comp.growthRate),
+              vehicleCount: comp.vehicleCount + Math.floor(Math.random() * 5),
+              lastUpdate: now
+            }
+          }
+          return comp
+        })
+        
+        return {
+          ...newState,
+          productionJobs: updatedProductionJobs,
+          salesJobs: updatedSalesJobs,
+          marketingCampaigns: updatedCampaigns,
+          marketEvents: updatedEvents,
+          competitors: updatedCompetitors
+        }
+      })
     }, 1000)
     return () => clearInterval(id)
   }, [timeSpeed])
@@ -259,11 +506,15 @@ export default function App() {
       {page === 'menu' && <MainMenu t={t} onNavigate={(p: Page) => setPage(p)} gameState={gameState} timeSpeed={timeSpeed} setTimeSpeed={setTimeSpeed} />}
       {page === 'settings' && <Settings lang={lang} setLang={setLang} onBack={() => setPage('menu')} t={t} theme={theme} setTheme={setTheme} timeSpeed={timeSpeed} setTimeSpeed={setTimeSpeed} />}
       {page === 'designer' && <VehicleDesigner t={t} onBack={() => setPage('menu')} gameState={gameState} updateGameState={updateGameState} />}
-      {page === 'manufacturing' && <Manufacturing t={t} onBack={() => setPage('menu')} gameState={gameState} updateGameState={updateGameState} />}
-      {page === 'market' && <GlobalMarket t={t} onBack={() => setPage('menu')} gameState={gameState} updateGameState={updateGameState} />}
+      {page === 'manufacturing' && <Manufacturing t={t} onBack={() => setPage('menu')} gameState={gameState} updateGameState={updateGameState} timeSpeed={timeSpeed} />}
+      {page === 'market' && <GlobalMarket t={t} onBack={() => setPage('menu')} gameState={gameState} updateGameState={updateGameState} timeSpeed={timeSpeed} />}
       {page === 'research' && <Research t={t} onBack={() => setPage('menu')} gameState={gameState} updateGameState={updateGameState} />}
       {page === 'competition' && <Competition t={t} onBack={() => setPage('menu')} gameState={gameState} />}
       {page === 'dashboard' && <Dashboard t={t} onBack={() => setPage('menu')} gameState={gameState} />}
+      {page === 'marketing' && <Marketing t={t} onBack={() => setPage('menu')} gameState={gameState} updateGameState={updateGameState} />}
+      {page === 'racing' && <Racing t={t} onBack={() => setPage('menu')} gameState={gameState} updateGameState={updateGameState} />}
+      {page === 'shop' && <Shop t={t} onBack={() => setPage('menu')} gameState={gameState} updateGameState={updateGameState} />}
+      {page === 'privacy' && <PrivacyPolicy onBack={() => setPage('menu')} />}
     </div>
   )
 }

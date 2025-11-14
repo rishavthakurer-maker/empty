@@ -1,6 +1,6 @@
 # 🚗 Vehicle Tycoon Pro
 
-A comprehensive car manufacturing tycoon game where you design, manufacture, and sell vehicles globally. Create custom vehicles from scratch by designing engines, chassis, interiors, and suspension systems. Research new technologies, compete with other manufacturers, and build a global automotive empire.
+A comprehensive car manufacturing tycoon game where you design, manufacture, and sell vehicles globally. Create custom vehicles from scratch by designing engines, chassis, interiors, and suspension systems. Research new technologies, compete with other manufacturers, build marketing campaigns, race your vehicles, and build a global automotive empire.
 
 ## 🎮 Core Features
 
@@ -14,18 +14,45 @@ A comprehensive car manufacturing tycoon game where you design, manufacture, and
 - **Dynamic Stats**: Aerodynamics, Performance, Safety, Comfort, Efficiency calculated in real-time
 - **Market Appeal**: Automatically calculated based on design features
 
-### 🏭 Manufacturing
-- **Production**: Manufacture your designed vehicles in batches
+### 🏭 Manufacturing (Time-Based Production)
+- **Production Jobs**: Manufacture vehicles with real-time progress bars
+- **Vehicle-Specific Times**: Cars (30s), Buses (60s), Trucks (45s) per unit
+- **Complexity Scaling**: More complex designs take longer to produce
+- **Active Job Tracking**: Monitor multiple production batches simultaneously
+- **Completion System**: Collect finished vehicles when ready
 - **Cost Management**: Production costs scale with design complexity
-- **Inventory**: Track produced vs sold vehicles
 - **Employee Management**: Workforce grows with production scale
 
-### 🌍 Global Market
+### 🌍 Global Market (Dynamic Demand & Timed Sales)
 - **5 Markets**: USA, Europe, Asia, India, Brazil
-- **Dynamic Pricing**: Market-specific price multipliers
-- **Market Demand**: High/Medium demand affects sales strategy
-- **Sales Tracking**: Monitor revenue by region
-- **Reputation Growth**: Increase reputation with each sale
+- **Dynamic Demand**: Real-time demand tracking (0-100%) per market
+- **Demand Trending**: Markets trend up 📈, down 📉, or stable ➡️
+- **Timed Sales**: Selling takes time based on market demand
+- **Progress Tracking**: Watch sales jobs complete in real-time
+- **Market Multipliers**: Region-specific pricing (0.8x - 1.2x)
+- **Sales Analytics**: Monitor revenue by region
+- **Reputation & Fans**: Build reputation and fanbase through sales
+
+### 📢 Marketing & Advertising
+- **5 Campaign Types**: 
+  - 📱 Social Media ($5k, 7 days, +5% demand)
+  - 📺 TV Advertising ($25k, 14 days, +15% demand)
+  - 🏙️ Billboard ($15k, 30 days, +10% demand)
+  - ⚽ Sports Sponsorship ($50k, 90 days, +25% demand)
+  - ⭐ Influencer Marketing ($35k, 21 days, +20% demand)
+- **Market Targeting**: Target specific countries for campaigns
+- **Demand Boost**: Increase market demand directly
+- **Fan Growth**: Gain thousands of fans per campaign
+- **Rating System**: Build 0-5 star company rating
+- **Active Tracking**: Monitor multiple campaigns simultaneously
+
+### 🏁 Racing Championship
+- **Competitive Racing**: Race your vehicles against 8 major brands
+- **Score Calculation**: Based on performance, efficiency, safety, reliability, style
+- **Prize System**: Win $10k + fans + reputation, or lose $2k + reputation
+- **Race Animation**: Watch live progress during races
+- **Race History**: Track all previous races and win rate
+- **Strategic Depth**: Choose vehicles and opponents wisely
 
 ### 🔬 Research & Technology
 - **5 Research Categories**: Engine, Aerodynamics, Safety, Comfort, Efficiency
@@ -33,44 +60,98 @@ A comprehensive car manufacturing tycoon game where you design, manufacture, and
 - **Tech Progression**: Multiple levels for each category
 - **Competitive Advantage**: Researched tech unlocks new design options
 
-### 🏆 Competition System
-- **4 Competitors**: Tesla, BMW, Toyota (starting 0 vehicles)
+### 🏆 Competition System (8 Rivals)
+- **8 Major Competitors**: 
+  - Tesla (Rep: 85, Growth: 5%/day)
+  - BMW (Rep: 90, Growth: 3%/day)
+  - Toyota (Rep: 95, Growth: 2%/day)
+  - Ford (Rep: 80, Growth: 2.5%/day)
+  - Honda (Rep: 88, Growth: 3%/day)
+  - Volkswagen (Rep: 85, Growth: 2.8%/day)
+  - Hyundai (Rep: 78, Growth: 4%/day)
+  - Mercedes (Rep: 92, Growth: 2.5%/day)
+- **Dynamic Growth**: Competitors gain reputation and produce vehicles over time
 - **Global Rankings**: Based on reputation and vehicle count
 - **Market Share**: Compete for market dominance
-- **Achievement Milestones**: Reach elite status (reputation 80+)
+
+### 🌪️ Random Market Events
+- **6 Event Types**: Economic Boom, Market Crash, Material Shortage, Innovation, Scandal, Regulation
+- **Price Multipliers**: Events affect sales revenue (0.6x - 1.5x)
+- **Duration**: 3-10 days per event
+- **Strategic Impact**: Adapt your strategy to market conditions
+- **Visual Alerts**: See active events and their effects
 
 ### 📊 Dashboard
-- **Real-time Stats**: Cash, employees, reputation, designs
+- **Real-time Stats**: Cash, employees, reputation, designs, fans, rating
 - **Production Summary**: Total produced, sold, revenue
 - **Vehicle Analytics**: Breakdown by type (car/bus/truck)
 - **Research Progress**: Tracking completed tech
 - **Regional Sales**: Sales distribution across markets
+- **Active Jobs**: Production and sales in progress
 
 ## ✨ Game Mechanics
 
-### Design Flow
-1. Choose vehicle type (Car/Bus/Truck)
-2. Configure engine (cylinders, displacement, fuel, turbo)
-3. Design chassis (dimensions, weight, drive type)
-4. Customize interior (seats, materials, climate)
-5. Select wheels (size, tire type)
-6. Review stats and save design
-7. See calculated production cost
+### Complete Production Cycle
+1. Design vehicle in Vehicle Designer
+2. Select design and quantity in Manufacturing
+3. Pay upfront production cost
+4. Watch real-time progress bar (30-60s per unit)
+5. Collect completed vehicles when 100% done
+6. Vehicles added to inventory
 
-### Production & Sales Loop
-1. Design vehicles with your specifications
-2. Manufacture batches at calculated costs
-3. Sell to different global markets
-4. Adjust pricing based on market demand
-5. Build reputation with each sale
-6. Unlock new research options
+### Complete Sales Cycle
+1. Check market demand levels (0-100%)
+2. (Optional) Launch marketing campaign to boost demand
+3. Select market and vehicles to sell
+4. Start sales job (progress bar appears)
+5. Selling time based on demand (faster with high demand)
+6. Collect revenue when sales complete
+7. Gain reputation and fans
 
-### Strategy Elements
-- **Budget Management**: Limited starting capital ($100,000)
-- **R&D Investment**: Spend money on technology to improve future designs
-- **Market Selection**: Each market has different demand and pricing
-- **Employee Scaling**: Workforce grows with production, increases costs
-- **Reputation System**: Leads to market dominance and competitive edge
+### Marketing Strategy
+1. Choose campaign type (Social Media to Sports Sponsorship)
+2. Target specific country
+3. Campaign runs for duration (7-90 days)
+4. Market demand increases
+5. Gain fans and improve company rating
+6. Multiple campaigns can run simultaneously
+
+### Racing for Profit & Reputation
+1. Select one of your vehicles
+2. Choose competitor to race against
+3. Watch animated race progress
+4. Win: +$10k, +reputation, +fans
+5. Lose: -$2k, -reputation
+6. Build racing reputation and track history
+
+### Event-Driven Strategy
+1. Monitor random market events
+2. Sell during Economic Booms (×1.5 revenue)
+3. Hold inventory during Market Crashes
+4. Adapt to Material Shortages and Regulations
+5. Capitalize on Innovation Breakthroughs
+6. Navigate Industry Scandals
+
+### Time Management
+- **Time Speed Control**: 1x, 2x, or Pause
+- **Production Jobs**: Run in background
+- **Sales Jobs**: Process simultaneously
+- **Marketing Campaigns**: Active for days/weeks
+- **Competitor Growth**: Daily reputation increases
+- **Random Events**: Occur periodically
+
+## 🎁 Gameplay Tips
+
+1. **Start Small**: Design a simple, affordable car
+2. **Check Demand First**: Sell to high-demand markets
+3. **Use Marketing**: Boost demand before major sales
+4. **Time Production**: Start jobs before going offline
+5. **Race Strategically**: Race weaker opponents first
+6. **Watch Events**: Sell during booms, wait during crashes
+7. **Build Fans**: Marketing campaigns build loyal fanbase
+8. **Diversify Markets**: Don't rely on one region
+9. **Monitor Competitors**: Track rival growth rates
+10. **Upgrade Gradually**: Scale production with cash flow
 
 ## 🎨 Visual Design
 - Modern dark-red/white/grey color palette

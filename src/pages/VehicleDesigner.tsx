@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { GameState } from '../App'
 import VehicleSelection, { VehicleCategory, VehicleSubcategory } from './VehicleSelection'
-import CarBuilder from './CarBuilder'
+import CarDesigner from './CarDesigner'
+import BusDesigner from './BusDesigner'
+import TruckDesigner from './TruckDesigner'
 
 export default function VehicleDesigner({ t, onBack, gameState, updateGameState }: {
   t: (k: string) => string
@@ -9,7 +11,7 @@ export default function VehicleDesigner({ t, onBack, gameState, updateGameState 
   gameState: GameState
   updateGameState: (updates: Partial<GameState>) => void
 }) {
-  const [mode, setMode] = useState<'list' | 'selection' | 'builder'>('list')
+  const [mode, setMode] = useState<'list' | 'selection' | 'designer'>('list')
   const [selectedVehicle, setSelectedVehicle] = useState<{ category: VehicleCategory; subcategory: VehicleSubcategory } | null>(null)
 
   if (mode === 'selection') {
@@ -21,14 +23,20 @@ export default function VehicleDesigner({ t, onBack, gameState, updateGameState 
         updateGameState={updateGameState}
         onSelectVehicle={(category, subcategory) => {
           setSelectedVehicle({ category, subcategory })
-          setMode('builder')
+          setMode('designer')
         }}
       />
     )
   }
 
-  if (mode === 'builder') {
-    return <CarBuilder t={t} onBack={() => setMode('list')} gameState={gameState} updateGameState={updateGameState} selectedVehicle={selectedVehicle} />
+  if (mode === 'designer' && selectedVehicle) {
+    if (selectedVehicle.category === 'car') {
+      return <CarDesigner t={t} onBack={() => setMode('list')} gameState={gameState} updateGameState={updateGameState} subcategory={selectedVehicle.subcategory} />
+    } else if (selectedVehicle.category === 'bus') {
+      return <BusDesigner t={t} onBack={() => setMode('list')} gameState={gameState} updateGameState={updateGameState} subcategory={selectedVehicle.subcategory} />
+    } else if (selectedVehicle.category === 'truck') {
+      return <TruckDesigner t={t} onBack={() => setMode('list')} gameState={gameState} updateGameState={updateGameState} subcategory={selectedVehicle.subcategory} />
+    }
   }
 
   return (

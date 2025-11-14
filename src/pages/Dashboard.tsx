@@ -33,6 +33,14 @@ export default function Dashboard({ t, onBack, gameState }: {
             <div className="small">📦 Designs</div>
             <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--white)' }}>{gameState.designs.length}</div>
           </div>
+          <div style={{ background: 'rgba(0,150,0,0.1)', padding: 12, borderRadius: 8 }}>
+            <div className="small">🔬 Research Points</div>
+            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#4ade80' }}>{Math.floor(gameState.researchPoints)}</div>
+          </div>
+          <div style={{ background: 'rgba(218,165,32,0.1)', padding: 12, borderRadius: 8 }}>
+            <div className="small">👑 Premium Coins</div>
+            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#fbbf24' }}>{Math.floor(gameState.premiumCurrency)}</div>
+          </div>
         </div>
 
         <div className="small" style={{ fontWeight: 'bold', marginBottom: 12 }}>Production Summary</div>

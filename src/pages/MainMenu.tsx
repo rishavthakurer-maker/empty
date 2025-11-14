@@ -42,6 +42,12 @@ export default function MainMenu({ t, onNavigate, gameState, timeSpeed, setTimeS
           <button onClick={() => onNavigate('market')} style={{padding:20,background:'linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%)',border:'none',borderRadius:8,color:'#fff',cursor:'pointer',fontWeight:'bold',fontSize:14,boxShadow:'0 4px 10px rgba(0,0,0,0.2)',transition:'all 0.3s'}}>
             🌍<br/>Market
           </button>
+          <button onClick={() => onNavigate('marketing')} style={{padding:20,background:'linear-gradient(135deg, #E91E63 0%, #C2185B 100%)',border:'none',borderRadius:8,color:'#fff',cursor:'pointer',fontWeight:'bold',fontSize:14,boxShadow:'0 4px 10px rgba(0,0,0,0.2)',transition:'all 0.3s'}}>
+            📢<br/>Marketing
+          </button>
+          <button onClick={() => onNavigate('racing')} style={{padding:20,background:'linear-gradient(135deg, #FF5722 0%, #E64A19 100%)',border:'none',borderRadius:8,color:'#fff',cursor:'pointer',fontWeight:'bold',fontSize:14,boxShadow:'0 4px 10px rgba(0,0,0,0.2)',transition:'all 0.3s'}}>
+            🏁<br/>Racing
+          </button>
           <button onClick={() => onNavigate('research')} style={{padding:20,background:'linear-gradient(135deg, #4CAF50 0%, #388E3C 100%)',border:'none',borderRadius:8,color:'#fff',cursor:'pointer',fontWeight:'bold',fontSize:14,boxShadow:'0 4px 10px rgba(0,0,0,0.2)',transition:'all 0.3s'}}>
             🔬<br/>Research
           </button>
@@ -51,6 +57,9 @@ export default function MainMenu({ t, onNavigate, gameState, timeSpeed, setTimeS
           <button onClick={() => onNavigate('dashboard')} style={{padding:20,background:'linear-gradient(135deg, #607D8B 0%, #455A64 100%)',border:'none',borderRadius:8,color:'#fff',cursor:'pointer',fontWeight:'bold',fontSize:14,boxShadow:'0 4px 10px rgba(0,0,0,0.2)',transition:'all 0.3s'}}>
             📊<br/>Dashboard
           </button>
+          <button onClick={() => onNavigate('shop')} style={{padding:20,background:'linear-gradient(135deg, #FFD700 0%, #DAA520 100%)',border:'none',borderRadius:8,color:'#000',cursor:'pointer',fontWeight:'bold',fontSize:14,boxShadow:'0 4px 10px rgba(0,0,0,0.2)',transition:'all 0.3s'}}>
+            🛍️<br/>Shop
+          </button>
         </div>
 
         {/* Bottom Controls */}
@@ -58,7 +67,10 @@ export default function MainMenu({ t, onNavigate, gameState, timeSpeed, setTimeS
           <button onClick={() => onNavigate('settings')} style={{flex:1,padding:14,background:'#455A64',border:'none',borderRadius:8,color:'#fff',cursor:'pointer',fontWeight:'bold',fontSize:14,boxShadow:'0 4px 10px rgba(0,0,0,0.2)'}}>
             ⚙️ Settings
           </button>
-          <button onClick={() => setTimeSpeed(prev => (prev > 0 ? 0 : 1))} style={{flex:1,padding:14,background:'#666',border:'none',borderRadius:8,color:'#fff',cursor:'pointer',fontWeight:'bold',fontSize:14,boxShadow:'0 4px 10px rgba(0,0,0,0.2)'}}>
+          <button onClick={() => onNavigate('privacy')} style={{flex:1,padding:14,background:'#6B5B95',border:'none',borderRadius:8,color:'#fff',cursor:'pointer',fontWeight:'bold',fontSize:14,boxShadow:'0 4px 10px rgba(0,0,0,0.2)'}}>
+            📋 Privacy
+          </button>
+          <button onClick={() => setTimeSpeed(timeSpeed > 0 ? 0 : 1)} style={{flex:1,padding:14,background:'#666',border:'none',borderRadius:8,color:'#fff',cursor:'pointer',fontWeight:'bold',fontSize:14,boxShadow:'0 4px 10px rgba(0,0,0,0.2)'}}>
             {timeSpeed > 0 ? '⏸️ Pause' : '▶ Resume'}
           </button>
         </div>
@@ -67,7 +79,7 @@ export default function MainMenu({ t, onNavigate, gameState, timeSpeed, setTimeS
         <div style={{position:'fixed',right:16,top:'40%',display:'flex',flexDirection:'column',gap:10,zIndex:1000}}>
           <button onClick={() => setTimeSpeed(1)} title="1x" style={{width:56,height:46,background: timeSpeed===1 ? '#ff6b6b' : 'rgba(0,0,0,0.5)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:8,color:'#fff',cursor:'pointer',fontWeight:'bold'}}>1x</button>
           <button onClick={() => setTimeSpeed(2)} title="2x" style={{width:56,height:46,background: timeSpeed===2 ? '#ff6b6b' : 'rgba(0,0,0,0.5)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:8,color:'#fff',cursor:'pointer',fontWeight:'bold'}}>2x</button>
-          <button onClick={() => setTimeSpeed(prev => (prev > 0 ? 0 : 1))} title="Pause/Resume" style={{width:56,height:46,background: timeSpeed===0 ? '#4CAF50' : 'rgba(0,0,0,0.5)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:8,color:'#fff',cursor:'pointer',fontWeight:'bold'}}>{timeSpeed===0 ? '▶' : '⏸'}</button>
+          <button onClick={() => setTimeSpeed(timeSpeed > 0 ? 0 : 1)} title="Pause/Resume" style={{width:56,height:46,background: timeSpeed===0 ? '#4CAF50' : 'rgba(0,0,0,0.5)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:8,color:'#fff',cursor:'pointer',fontWeight:'bold'}}>{timeSpeed===0 ? '▶' : '⏸'}</button>
         </div>
       </div>
     </div>

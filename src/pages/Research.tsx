@@ -2,15 +2,15 @@ import React, { useState } from 'react'
 import { GameState, ResearchTech } from '../App'
 
 const RESEARCH_TREE: ResearchTech[] = [
-  { id: 'turbo', name: 'Turbocharging', category: 'engine', level: 1, cost: 10000, researched: false },
-  { id: 'hybrid', name: 'Hybrid Technology', category: 'engine', level: 2, cost: 25000, researched: false },
-  { id: 'electric', name: 'Electric Powerplant', category: 'engine', level: 3, cost: 50000, researched: false },
-  { id: 'aero', name: 'Advanced Aerodynamics', category: 'aerodynamics', level: 1, cost: 15000, researched: false },
-  { id: 'carbon', name: 'Carbon Fiber Chassis', category: 'aerodynamics', level: 2, cost: 35000, researched: false },
-  { id: 'safety', name: 'Advanced Safety Systems', category: 'safety', level: 1, cost: 20000, researched: false },
-  { id: 'auto_drive', name: 'Autonomous Driving', category: 'safety', level: 2, cost: 60000, researched: false },
-  { id: 'luxury', name: 'Luxury Materials', category: 'comfort', level: 1, cost: 18000, researched: false },
-  { id: 'efficiency', name: 'Fuel Efficiency', category: 'efficiency', level: 1, cost: 12000, researched: false },
+  { id: 'turbo', name: 'Turbocharging', category: 'engine', level: 1, cost: 100, researched: false },
+  { id: 'hybrid', name: 'Hybrid Technology', category: 'engine', level: 2, cost: 250, researched: false },
+  { id: 'electric', name: 'Electric Powerplant', category: 'engine', level: 3, cost: 500, researched: false },
+  { id: 'aero', name: 'Advanced Aerodynamics', category: 'aerodynamics', level: 1, cost: 150, researched: false },
+  { id: 'carbon', name: 'Carbon Fiber Chassis', category: 'aerodynamics', level: 2, cost: 350, researched: false },
+  { id: 'safety', name: 'Advanced Safety Systems', category: 'safety', level: 1, cost: 200, researched: false },
+  { id: 'auto_drive', name: 'Autonomous Driving', category: 'safety', level: 2, cost: 600, researched: false },
+  { id: 'luxury', name: 'Luxury Materials', category: 'comfort', level: 1, cost: 180, researched: false },
+  { id: 'efficiency', name: 'Fuel Efficiency', category: 'efficiency', level: 1, cost: 120, researched: false },
 ]
 
 export default function Research({ t, onBack, gameState, updateGameState }: {
@@ -23,7 +23,7 @@ export default function Research({ t, onBack, gameState, updateGameState }: {
 
   const selectedResearch = RESEARCH_TREE.find(r => r.id === selectedTech)
   const researched = gameState.research.find(r => r.id === selectedTech)?.researched || false
-  const canResearch = gameState.money >= (selectedResearch?.cost || 0) && !researched
+  const canResearch = gameState.researchPoints >= (selectedResearch?.cost || 0) && !researched
 
   const handleResearch = () => {
     if (!selectedResearch || !canResearch) return
@@ -33,11 +33,11 @@ export default function Research({ t, onBack, gameState, updateGameState }: {
 
     updateGameState({
       research: newResearch,
-      money: gameState.money - selectedResearch.cost,
+      researchPoints: gameState.researchPoints - selectedResearch.cost,
       reputation: gameState.reputation + 10
     })
 
-    alert(`✅ Researched: ${selectedResearch.name}!`)
+    alert(`✅ Researched: ${selectedResearch.name}!\n🔬 Cost: ${selectedResearch.cost} research points`)
     setSelectedTech(null)
   }
 
@@ -48,7 +48,11 @@ export default function Research({ t, onBack, gameState, updateGameState }: {
       <div className="header"><div className="title">🔬 {t('research')}</div></div>
 
       <div style={{ marginTop: 16 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 16 }}>
+          <div style={{ background: 'rgba(139,0,0,0.1)', padding: 12, borderRadius: 8 }}>
+            <div className="small">🔬 Research Points</div>
+            <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#4ade80' }}>{Math.floor(gameState.researchPoints)}</div>
+          </div>
           <div style={{ background: 'rgba(139,0,0,0.1)', padding: 12, borderRadius: 8 }}>
             <div className="small">💰 Budget</div>
             <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--white)' }}>${Math.floor(gameState.money)}</div>
@@ -88,14 +92,14 @@ export default function Research({ t, onBack, gameState, updateGameState }: {
           <div style={{ background: 'rgba(139,0,0,0.15)', padding: 12, borderRadius: 8, marginBottom: 16 }}>
             <div className="small" style={{ fontWeight: 'bold' }}>{selectedResearch?.name}</div>
             <div className="small">Category: {selectedResearch?.category}</div>
-            <div className="small">Cost: ${selectedResearch?.cost}</div>
+            <div className="small" style={{ color: '#4ade80', fontWeight: 'bold' }}>Research Cost: {selectedResearch?.cost} points</div>
             <button
               className="btn"
               onClick={handleResearch}
               disabled={!canResearch}
               style={{ width: '100%', marginTop: 12 }}
             >
-              🔬 {canResearch ? 'Research Now' : 'Insufficient Funds'}
+              🔬 {canResearch ? 'Research Now' : 'Insufficient Research Points'}
             </button>
           </div>
         )}
